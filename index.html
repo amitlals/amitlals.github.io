@@ -5399,8 +5399,9 @@
             if (selectedContent) selectedContent.classList.add('active');
         }
 
-        // ========== AI CHAT WIDGET WITH GROQ API ==========
-        const GROQ_API_KEY = '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';
+        // ========== AI CHAT WIDGET WITH GROQ API (via Cloudflare Worker) ==========
+        // 🔐 API key is securely stored in Cloudflare Worker - never exposed to client
+        const GROQ_PROXY_URL = 'https://round-wildflower-8504.amitkumarlal.workers.dev';
         const chatMessages = document.getElementById('ai-chat-messages');
         const chatInput = document.getElementById('ai-chat-input');
         const chatWindow = document.getElementById('ai-chat-window');
