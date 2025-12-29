@@ -3400,6 +3400,43 @@
 
         .leaderboard-title i { font-size: 0.9rem; }
 
+        .leaderboard-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .leaderboard-link {
+            margin-left: auto;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+            transition: color 0.3s ease;
+        }
+
+        .leaderboard-link:hover {
+            color: var(--neon-orange);
+        }
+
+        .leaderboard-footer {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .loading-placeholder {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
         .model-item {
             display: flex;
             align-items: center;
@@ -3745,31 +3782,17 @@
                     <div class="leaderboard-title">
                         <i class="fas fa-trophy"></i>
                         <span>LLM Arena Rankings</span>
+                        <a href="https://lmarena.ai/?leaderboard" target="_blank" class="leaderboard-link" title="View full leaderboard"><i class="fas fa-external-link-alt"></i></a>
                     </div>
-                    <div class="model-item">
-                        <span class="model-rank gold">1</span>
-                        <span class="model-name">GPT-4o</span>
-                        <span class="model-score">1287</span>
+                    <div id="llm-rankings-container">
+                        <div class="model-item loading-placeholder">
+                            <span class="model-rank normal">-</span>
+                            <span class="model-name">Loading rankings...</span>
+                            <span class="model-score">...</span>
+                        </div>
                     </div>
-                    <div class="model-item">
-                        <span class="model-rank silver">2</span>
-                        <span class="model-name">Claude 3.5 Sonnet</span>
-                        <span class="model-score">1271</span>
-                    </div>
-                    <div class="model-item">
-                        <span class="model-rank bronze">3</span>
-                        <span class="model-name">Gemini 1.5 Pro</span>
-                        <span class="model-score">1260</span>
-                    </div>
-                    <div class="model-item">
-                        <span class="model-rank normal">4</span>
-                        <span class="model-name">Llama 3.1 405B</span>
-                        <span class="model-score">1243</span>
-                    </div>
-                    <div class="model-item">
-                        <span class="model-rank normal">5</span>
-                        <span class="model-name">Mistral Large 2</span>
-                        <span class="model-score">1218</span>
+                    <div class="leaderboard-footer">
+                        <span id="rankings-update-time">Fetching live data...</span>
                     </div>
                 </div>
 
@@ -4529,16 +4552,16 @@
             scrollProgress.style.width = progress + '%';
         });
 
-        // ========== AI INSIGHTS ROTATION ==========
+        // ========== AI INSIGHTS ROTATION (Dec 2025) ==========
         const aiInsights = [
-            { stat: "$184B", label: "Global AI market size projected for 2024", source: "Source: Statista, 2024" },
-            { stat: "72%", label: "Enterprises using AI in at least one business function", source: "Source: McKinsey, 2024" },
-            { stat: "1M+", label: "AI models hosted on Hugging Face", source: "Source: Hugging Face, 2024" },
-            { stat: "97%", label: "Developers using AI coding assistants report productivity gains", source: "Source: GitHub Survey, 2024" },
-            { stat: "40%", label: "Reduction in code review time with AI tools", source: "Source: Microsoft Research, 2024" },
-            { stat: "1.3B", label: "Parameters in GPT-4 Turbo's mixture of experts", source: "Source: OpenAI, 2024" },
-            { stat: "$5.4B", label: "GitHub Copilot projected revenue for 2024", source: "Source: Bloomberg, 2024" },
-            { stat: "100M+", label: "Weekly active users of ChatGPT", source: "Source: OpenAI, 2024" }
+            { stat: "$244B", label: "Global AI market size in 2025", source: "Source: Statista, 2025" },
+            { stat: "92%", label: "Enterprises using AI in production", source: "Source: McKinsey, 2025" },
+            { stat: "2M+", label: "AI models hosted on Hugging Face", source: "Source: Hugging Face, 2025" },
+            { stat: "97%", label: "Developers report productivity gains with AI coding assistants", source: "Source: GitHub Survey, 2025" },
+            { stat: "500M+", label: "Weekly active users of ChatGPT", source: "Source: OpenAI, 2025" },
+            { stat: "10M", label: "Context window tokens (Llama 4 Scout)", source: "Source: Meta AI, 2025" },
+            { stat: "82%", label: "SWE-Bench score by Claude Sonnet 4.5", source: "Source: Anthropic, 2025" },
+            { stat: "$15B+", label: "GitHub Copilot annual revenue run rate", source: "Source: Microsoft, 2025" }
         ];
         
         let currentInsightIndex = 0;
@@ -4565,6 +4588,40 @@
         }
         
         setInterval(rotateInsight, 5000);
+
+        // ========== LLM RANKINGS (Updated Dec 2025) ==========
+        // Data sourced from Artificial Analysis & Vellum.ai leaderboards
+        const llmRankings = [
+            { name: "GPT-5.2", score: 92, badge: "OpenAI" },
+            { name: "Gemini 3 Pro", score: 91, badge: "Google" },
+            { name: "Claude Opus 4.5", score: 87, badge: "Anthropic" },
+            { name: "Grok 4", score: 87, badge: "xAI" },
+            { name: "GPT-5.1", score: 88, badge: "OpenAI" }
+        ];
+
+        function initLLMRankings() {
+            const container = document.getElementById('llm-rankings-container');
+            const updateTimeEl = document.getElementById('rankings-update-time');
+            
+            if (!container) return;
+
+            const rankClasses = ['gold', 'silver', 'bronze', 'normal', 'normal'];
+            
+            container.innerHTML = llmRankings.map((model, index) => `
+                <div class="model-item">
+                    <span class="model-rank ${rankClasses[index]}">${index + 1}</span>
+                    <span class="model-name">${model.name}</span>
+                    <span class="model-score">${model.score}%</span>
+                </div>
+            `).join('');
+            
+            if (updateTimeEl) {
+                updateTimeEl.innerHTML = '<i class="fas fa-chart-line"></i> GPQA Diamond Benchmark • Dec 2025';
+            }
+        }
+
+        // Initialize rankings on page load
+        initLLMRankings();
 
         // ========== GITHUB CONTRIBUTIONS GRAPH ==========
         function generateContributionGraph() {
