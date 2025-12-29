@@ -3337,6 +3337,235 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* AI Pulse Dashboard Styles */
+        .ai-pulse-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.08) 100%);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid var(--card-border);
+        }
+
+        .ai-pulse-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .ai-pulse-header i {
+            font-size: 1.3rem;
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ai-pulse-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .ai-pulse-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .ai-pulse-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Model Leaderboard */
+        .model-leaderboard {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .leaderboard-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--neon-orange);
+            font-weight: 600;
+        }
+
+        .leaderboard-title i { font-size: 0.9rem; }
+
+        .model-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .model-item:last-child { border-bottom: none; }
+
+        .model-rank {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .model-rank.gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #000; }
+        .model-rank.silver { background: linear-gradient(135deg, #9ca3af, #d1d5db); color: #000; }
+        .model-rank.bronze { background: linear-gradient(135deg, #b45309, #d97706); color: #fff; }
+        .model-rank.normal { background: rgba(255,255,255,0.1); color: var(--text-secondary); }
+
+        .model-name {
+            flex: 1;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .model-score {
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Tech Pulse Status */
+        .tech-pulse {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .pulse-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--neon-cyan);
+            font-weight: 600;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-dot.online { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+        .status-dot.degraded { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+        .status-dot.offline { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
+        .status-name {
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        /* AI Insight */
+        .ai-insight {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            border: 1px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .insight-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--neon-pink);
+            font-weight: 600;
+        }
+
+        .insight-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .insight-stat {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .insight-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            transition: opacity 0.3s ease;
+        }
+
+        .insight-source {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 0.5rem;
+        }
+
+        @keyframes insightPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .insight-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.6rem;
+            color: var(--neon-green);
+            margin-left: auto;
+        }
+
+        .insight-live::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: insightPulse 2s infinite;
+        }
     </style>
 </head>
 <body>
@@ -3500,6 +3729,96 @@
                 </div>
                 <div class="skill-progress-bar">
                     <div class="skill-progress-fill ai" data-width="85"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Pulse Dashboard -->
+        <div class="ai-pulse-section scroll-hidden">
+            <div class="ai-pulse-header">
+                <i class="fas fa-robot"></i>
+                <h3>AI Pulse Dashboard</h3>
+            </div>
+            <div class="ai-pulse-grid">
+                <!-- Model Leaderboard -->
+                <div class="model-leaderboard">
+                    <div class="leaderboard-title">
+                        <i class="fas fa-trophy"></i>
+                        <span>LLM Arena Rankings</span>
+                    </div>
+                    <div class="model-item">
+                        <span class="model-rank gold">1</span>
+                        <span class="model-name">GPT-4o</span>
+                        <span class="model-score">1287</span>
+                    </div>
+                    <div class="model-item">
+                        <span class="model-rank silver">2</span>
+                        <span class="model-name">Claude 3.5 Sonnet</span>
+                        <span class="model-score">1271</span>
+                    </div>
+                    <div class="model-item">
+                        <span class="model-rank bronze">3</span>
+                        <span class="model-name">Gemini 1.5 Pro</span>
+                        <span class="model-score">1260</span>
+                    </div>
+                    <div class="model-item">
+                        <span class="model-rank normal">4</span>
+                        <span class="model-name">Llama 3.1 405B</span>
+                        <span class="model-score">1243</span>
+                    </div>
+                    <div class="model-item">
+                        <span class="model-rank normal">5</span>
+                        <span class="model-name">Mistral Large 2</span>
+                        <span class="model-score">1218</span>
+                    </div>
+                </div>
+
+                <!-- Tech Pulse Status -->
+                <div class="tech-pulse">
+                    <div class="pulse-title">
+                        <i class="fas fa-satellite-dish"></i>
+                        <span>Platform Status</span>
+                    </div>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span class="status-name">OpenAI</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span class="status-name">Azure AI</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span class="status-name">Anthropic</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span class="status-name">HuggingFace</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span class="status-name">GitHub Copilot</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span class="status-name">Google AI</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Insight of the Day -->
+                <div class="ai-insight">
+                    <div class="insight-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>AI Insight</span>
+                        <span class="insight-live">LIVE</span>
+                    </div>
+                    <div class="insight-content" id="insight-content">
+                        <div class="insight-stat" id="insight-stat">$184B</div>
+                        <div class="insight-label" id="insight-label">Global AI market size projected for 2024</div>
+                        <div class="insight-source" id="insight-source">Source: Statista, 2024</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4210,6 +4529,43 @@
             scrollProgress.style.width = progress + '%';
         });
 
+        // ========== AI INSIGHTS ROTATION ==========
+        const aiInsights = [
+            { stat: "$184B", label: "Global AI market size projected for 2024", source: "Source: Statista, 2024" },
+            { stat: "72%", label: "Enterprises using AI in at least one business function", source: "Source: McKinsey, 2024" },
+            { stat: "1M+", label: "AI models hosted on Hugging Face", source: "Source: Hugging Face, 2024" },
+            { stat: "97%", label: "Developers using AI coding assistants report productivity gains", source: "Source: GitHub Survey, 2024" },
+            { stat: "40%", label: "Reduction in code review time with AI tools", source: "Source: Microsoft Research, 2024" },
+            { stat: "1.3B", label: "Parameters in GPT-4 Turbo's mixture of experts", source: "Source: OpenAI, 2024" },
+            { stat: "$5.4B", label: "GitHub Copilot projected revenue for 2024", source: "Source: Bloomberg, 2024" },
+            { stat: "100M+", label: "Weekly active users of ChatGPT", source: "Source: OpenAI, 2024" }
+        ];
+        
+        let currentInsightIndex = 0;
+        function rotateInsight() {
+            const statEl = document.getElementById('insight-stat');
+            const labelEl = document.getElementById('insight-label');
+            const sourceEl = document.getElementById('insight-source');
+            
+            if (statEl && labelEl && sourceEl) {
+                currentInsightIndex = (currentInsightIndex + 1) % aiInsights.length;
+                const insight = aiInsights[currentInsightIndex];
+                
+                statEl.style.opacity = '0';
+                labelEl.style.opacity = '0';
+                
+                setTimeout(() => {
+                    statEl.textContent = insight.stat;
+                    labelEl.textContent = insight.label;
+                    sourceEl.textContent = insight.source;
+                    statEl.style.opacity = '1';
+                    labelEl.style.opacity = '1';
+                }, 300);
+            }
+        }
+        
+        setInterval(rotateInsight, 5000);
+
         // ========== GITHUB CONTRIBUTIONS GRAPH ==========
         function generateContributionGraph() {
             const graph = document.getElementById('contributions-graph');
@@ -4491,7 +4847,7 @@
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-        document.querySelectorAll('.section').forEach(section => {
+        document.querySelectorAll('.section, .skills-progress-section, .ai-pulse-section').forEach(section => {
             section.classList.add('scroll-hidden');
             revealObserver.observe(section);
         });
