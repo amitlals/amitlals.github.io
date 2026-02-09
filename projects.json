@@ -1,0 +1,347 @@
+{
+  "$schema": "projects-schema",
+  "_meta": {
+    "description": "Master registry of all Amit Lal's projects, apps, demos & resources. Edit THIS file to add/update projects — the portfolio page reads from it.",
+    "lastUpdated": "2026-02-08",
+    "author": "Amit Kumar Lal",
+    "usage": "Consumed by index.html / draft2.html via fetch('projects.json'). Each section (liveDemos, apps, articles, etc.) renders from its respective array."
+  },
+
+  "liveDemos": [
+    {
+      "id": "sap-landscape-digital-twin",
+      "name": "SAP Landscape Digital Twin",
+      "repo": "amitlals/SAP-Landscape-Digital-Twin",
+      "url": "https://sap-landscape-digital-twin.amit-lal.com/",
+      "description": "Interactive 3D visualization of SAP landscape architecture with real-time monitoring, chaos engineering simulation, and topology mapping.",
+      "tags": ["azure", "sap", "monitoring-automation", "chaos-engineering", "3d", "digital-twin"],
+      "icon": "fas fa-cube",
+      "color": "#00d4ff",
+      "featured": true,
+      "dateAdded": "2026-01-15"
+    },
+    {
+      "id": "cloud-region-advisor",
+      "name": "Cloud Region Advisor",
+      "repo": "amitlals/cloud-region-advisor",
+      "url": "https://cloudregionadvisor.amit-lal.com/",
+      "description": "AI-powered tool to recommend optimal Azure regions based on latency, compliance, cost, and SAP workload requirements.",
+      "tags": ["azure", "ai", "cloud", "advisor"],
+      "icon": "fas fa-globe",
+      "color": "#6366f1",
+      "featured": true,
+      "dateAdded": "2026-01-10"
+    },
+    {
+      "id": "copilot-roi-calculator",
+      "name": "Copilot ROI Calculator",
+      "repo": "amitlals/copilot-roi-calculator",
+      "url": "https://amitlals.github.io/copilot-roi-calculator/",
+      "description": "Microsoft M365 Copilot ROI & savings calculator for enterprise adoption planning.",
+      "tags": ["copilot", "m365", "roi", "calculator"],
+      "icon": "fas fa-calculator",
+      "color": "#6366f1",
+      "featured": true,
+      "dateAdded": "2025-06-01"
+    },
+    {
+      "id": "sap-rpt1-oss-playground",
+      "name": "SAP RPT-1-OSS Playground",
+      "repo": "amitlals/SAP-RPT-1-OSS-App-playground",
+      "url": "https://huggingface.co/spaces/amitlal/sap-finance-dashboard-RPT-1-OSS",
+      "description": "SAP Model Playground with RPT-1-OSS Platform for finance dashboard exploration.",
+      "tags": ["sap", "ai", "huggingface", "finance"],
+      "icon": "fas fa-flask",
+      "color": "#ffbd00",
+      "featured": false,
+      "dateAdded": "2025-11-18"
+    },
+    {
+      "id": "vibing-steampunk-v2",
+      "name": "Vibing Steampunk v2",
+      "repo": "amitlals/vibing-steampunk-v2",
+      "url": "",
+      "description": "Steampunk-themed interactive visualization project.",
+      "tags": ["creative", "visualization"],
+      "icon": "fas fa-cogs",
+      "color": "#d4a574",
+      "featured": false,
+      "dateAdded": "2025-10-01"
+    },
+    {
+      "id": "sap-on-azure-ai-template",
+      "name": "SAP on Azure AI Use Cases",
+      "repo": "amitlals/SAP-on-Azure-AI-Use-cases-template",
+      "url": "",
+      "description": "Template and accelerator for SAP on Azure AI use cases including Azure Functions, App Service, DevOps, Logic Apps & Power Apps.",
+      "tags": ["azure", "sap", "ai", "template", "azure-functions", "logicapps", "powerapps"],
+      "icon": "fas fa-project-diagram",
+      "color": "#00a4ef",
+      "featured": false,
+      "dateAdded": "2025-04-02"
+    },
+    {
+      "id": "btp-services-explorer",
+      "name": "BTP Services Explorer",
+      "repo": "amitlals/SAP-BTP-service-Dashboard-unofficial",
+      "url": "https://studio--btp-services-explorer.us-central1.hosted.app",
+      "description": "Unofficial SAP BTP Services Explorer app for discovering and browsing all available SAP BTP services.",
+      "tags": ["sap", "btp", "dashboard", "explorer"],
+      "icon": "fas fa-search",
+      "color": "#008fd3",
+      "featured": true,
+      "dateAdded": "2025-03-01"
+    },
+    {
+      "id": "stock-analysis-autogen",
+      "name": "Smart Stock Analysis",
+      "repo": "amitlals/Stock-Analysis-AutoGen-Multi-Agent-Azure-AI-Foundry",
+      "url": "",
+      "description": "AI-driven stock analysis app using multi-agentic architecture with Azure AI Foundry and AutoGen.",
+      "tags": ["azure", "ai", "autogen", "finance", "multi-agent"],
+      "icon": "fas fa-chart-line",
+      "color": "#10b981",
+      "featured": false,
+      "dateAdded": "2025-02-06"
+    },
+    {
+      "id": "ai-financial-engineering",
+      "name": "AI Financial Engineering",
+      "repo": "amitlals/AI-Financial-Engineering-Agentic-System",
+      "url": "",
+      "description": "Agentic system for AI-powered financial engineering and analysis.",
+      "tags": ["ai", "finance", "agentic"],
+      "icon": "fas fa-coins",
+      "color": "#f59e0b",
+      "featured": false,
+      "dateAdded": "2025-02-06"
+    },
+    {
+      "id": "sap-ewa-copilot-agent",
+      "name": "SAP EWA Copilot Agent v2",
+      "repo": "amitlals/SAP-EWA-Copilot-Agent-v2",
+      "url": "",
+      "description": "AI Copilot Agent for reading and analyzing SAP Early Watch Alert reports.",
+      "tags": ["sap", "copilot", "ai-agent", "ewa"],
+      "icon": "fas fa-shield-alt",
+      "color": "#ef4444",
+      "featured": false,
+      "dateAdded": "2025-01-01"
+    },
+    {
+      "id": "taskweaver-sap-ai-agent",
+      "name": "TaskWeaver SAP AI Agent",
+      "repo": "amitlals/TaskWeaver-SAP-AI-AGENT",
+      "url": "https://aka.ms/TaskWeaver",
+      "description": "SAP-specialized AI Agent built on Microsoft TaskWeaver framework (repo archived Feb 2026).",
+      "tags": ["sap", "ai-agent", "taskweaver", "microsoft"],
+      "icon": "fas fa-robot",
+      "color": "#8b5cf6",
+      "featured": false,
+      "dateAdded": "2024-01-03"
+    },
+    {
+      "id": "jetson-agx-thor-llm",
+      "name": "Jetson AGX Thor LLMs",
+      "repo": "amitlals/Jetson-AGX-Thor-for-running-Open-Source-LLMs",
+      "url": "",
+      "description": "Running open-source large language models on NVIDIA Jetson AGX Thor for edge AI inference.",
+      "tags": ["nvidia", "llm", "edge-ai", "jetson"],
+      "icon": "fas fa-microchip",
+      "color": "#76b900",
+      "featured": false,
+      "dateAdded": "2025-08-28"
+    },
+    {
+      "id": "azure-search-openai-hr",
+      "name": "Azure RAG HR Demo",
+      "repo": "amitlals/azure-search-openai-demo-HR",
+      "url": "",
+      "description": "Retrieval-Augmented Generation pattern for HR Q&A using Azure Cognitive Search and Azure OpenAI.",
+      "tags": ["azure", "openai", "rag", "search"],
+      "icon": "fas fa-users",
+      "color": "#00a4ef",
+      "featured": false,
+      "dateAdded": "2023-10-01"
+    },
+    {
+      "id": "knowledge-mining-sap-ewa",
+      "name": "Knowledge Mining SAP EWA",
+      "repo": "amitlals/Knowledge-Mining-with-OpenAI-SAP-EWA",
+      "url": "",
+      "description": "Knowledge Mining solution with OpenAI to analyze large SAP Early Watch reports via Power Virtual Agents.",
+      "tags": ["azure", "openai", "sap", "knowledge-mining", "pva"],
+      "icon": "fas fa-database",
+      "color": "#742774",
+      "featured": false,
+      "dateAdded": "2023-09-01"
+    }
+  ],
+
+  "apps": [
+    {
+      "id": "copilot-roi",
+      "name": "Copilot ROI",
+      "subtitle": "M365 Savings Calculator",
+      "url": "https://amitlals.github.io/copilot-roi-calculator/",
+      "icon": "fas fa-calculator",
+      "color": "#6366f1"
+    },
+    {
+      "id": "btp-explorer",
+      "name": "BTP Explorer",
+      "subtitle": "SAP Services Discovery",
+      "url": "https://studio--btp-services-explorer.us-central1.hosted.app/login",
+      "icon": "fas fa-search",
+      "color": "#008fd3"
+    },
+    {
+      "id": "azure-status",
+      "name": "Azure Status",
+      "subtitle": "Service Health Monitor",
+      "url": "https://aka.ms/azurestatuschecker/",
+      "icon": "fas fa-check-circle",
+      "color": "#00a4ef"
+    },
+    {
+      "id": "sap-azure-gpt",
+      "name": "SAP Azure GPT",
+      "subtitle": "Technical Copilot",
+      "url": "https://chatgpt.com/g/g-P0b7jVeUn-sap-on-azure-technical-copilot",
+      "icon": "fas fa-robot",
+      "color": "#10a37f"
+    },
+    {
+      "id": "huggingface",
+      "name": "HuggingFace",
+      "subtitle": "AI Models & Demos",
+      "url": "https://huggingface.co/amitlal",
+      "icon": "fas fa-brain",
+      "color": "#ffbd00"
+    },
+    {
+      "id": "cloud-region-advisor",
+      "name": "Cloud Region Advisor",
+      "subtitle": "Optimal Azure Region Picker",
+      "url": "https://cloudregionadvisor.amit-lal.com/",
+      "icon": "fas fa-globe",
+      "color": "#6366f1"
+    },
+    {
+      "id": "sap-digital-twin",
+      "name": "SAP Digital Twin",
+      "subtitle": "3D Landscape Visualizer",
+      "url": "https://sap-landscape-digital-twin.amit-lal.com/",
+      "icon": "fas fa-cube",
+      "color": "#00d4ff"
+    }
+  ],
+
+  "articles": [
+    {
+      "id": "sap-tech-reports",
+      "name": "SAP Tech Reports",
+      "subtitle": "6 AI Approaches for SAP EWA",
+      "url": "https://community.powerplatform.com/blogs/post/?postid=b738010c-c5fa-ef11-be20-6045bdf03fcb",
+      "icon": "fas fa-file-alt",
+      "color": "#742774"
+    },
+    {
+      "id": "copilot-agents-sap",
+      "name": "Copilot Agents for SAP",
+      "subtitle": "Multi-Agent AI Platform",
+      "url": "https://community.powerplatform.com/blogs/post/?postid=6a8fb326-068d-ef11-ac21-6045bda6da2f",
+      "icon": "fas fa-user-tie",
+      "color": "#742774"
+    },
+    {
+      "id": "ai-whiteboard",
+      "name": "AI Whiteboard Scenarios",
+      "subtitle": "Azure OpenAI + SAP S/4HANA",
+      "url": "https://techcommunity.microsoft.com/blog/azure-ai-services-blog/powering-your-business-with-ai-7-unbelievable-whiteboard-scenarios-for-sap-s4han/3790982",
+      "icon": "fas fa-lightbulb",
+      "color": "#00a4ef"
+    },
+    {
+      "id": "ai-2040-book",
+      "name": "AI 2040 Book",
+      "subtitle": "Enterprise AI Integration",
+      "url": "https://www.amazon.com/AI-2040-Artificial-Intelligence-Reshape-ebook/dp/B0DNQ1N4G1",
+      "icon": "fas fa-book",
+      "color": "#fafafa"
+    }
+  ],
+
+  "socialLinks": [
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "subtitle": "Professional Network",
+      "url": "https://www.linkedin.com/in/amitlal/",
+      "icon": "fab fa-linkedin",
+      "color": "#0077b5"
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "subtitle": "Code Repositories",
+      "url": "https://github.com/amitlals",
+      "icon": "fab fa-github",
+      "color": "#6e7681"
+    },
+    {
+      "id": "twitter",
+      "name": "X / Twitter",
+      "subtitle": "Tech Insights",
+      "url": "https://x.com/amitlalamitlal",
+      "icon": "fab fa-twitter",
+      "color": "#1da1f2"
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "subtitle": "AI Tutorials",
+      "url": "https://www.youtube.com/@AI-with-AmitLal",
+      "icon": "fab fa-youtube",
+      "color": "#ff0000"
+    },
+    {
+      "id": "newsletter",
+      "name": "Newsletter",
+      "subtitle": "AI with Amit",
+      "url": "https://ai-with-amit.beehiiv.com/subscribe",
+      "icon": "fas fa-envelope-open-text",
+      "color": "#f472b6"
+    }
+  ],
+
+  "workshops": [
+    {
+      "id": "build-first-ai-agent",
+      "name": "Build Your First AI Agent",
+      "repo": "amitlals/Build-your-first-ai-agent-workshop",
+      "url": "https://aka.ms/aitour/wrk552",
+      "description": "Build your first agent with Azure AI Agent Service — hands-on workshop.",
+      "tags": ["azure", "ai-agent", "workshop"],
+      "icon": "fas fa-chalkboard-teacher",
+      "color": "#00a4ef"
+    }
+  ],
+
+  "config": {
+    "liveDemosLimit": 12,
+    "showFeaturedFirst": true,
+    "githubUsername": "amitlals",
+    "fetchFromGitHubAPI": true,
+    "autoDiscoverNewRepos": true,
+    "excludeForkedRepos": false,
+    "excludeRepos": [
+      "amitlals.github.io",
+      "amitlals.github.com",
+      "amitlals",
+      "amitlal",
+      "amit",
+      "skills"
+    ]
+  }
+}
