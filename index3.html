@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amit Lal · Portfolio OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ═══════════════════════════════════════════════════════
+   RESET & ROOT
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --glass-bg: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.12);
+  --glass-blur: blur(24px);
+  --glass-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  --titlebar-bg: rgba(30,30,45,0.92);
+  --taskbar-bg: rgba(10,10,20,0.88);
+  --accent: #0078d4;
+  --accent2: #00d4ff;
+  --text: #e8eaf0;
+  --text-muted: #9ba3b8;
+  --tag-bg: rgba(0,120,212,0.18);
+  --win-radius: 10px;
+  --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  font-family: var(--font);
+  background: #000;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOOT SCREEN
+═══════════════════════════════════════════════════════ */
+#boot-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #000;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 40px;
+  transition: opacity 0.6s ease;
+}
+#boot-screen.fade-out { opacity: 0; pointer-events: none; }
+.boot-logo {
+  font-size: 5rem; color: #0078d4;
+  filter: drop-shadow(0 0 30px rgba(0,120,212,0.6));
+  animation: bootPulse 1.2s ease-in-out infinite alternate;
+}
+@keyframes bootPulse { from { opacity: 0.6; } to { opacity: 1; } }
+.boot-dots { display: flex; gap: 10px; }
+.boot-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #0078d4; opacity: 0.3;
+  animation: dotBounce 1.2s ease-in-out infinite;
+}
+.boot-dot:nth-child(2) { animation-delay: 0.2s; }
+.boot-dot:nth-child(3) { animation-delay: 0.4s; }
+.boot-dot:nth-child(4) { animation-delay: 0.6s; }
+.boot-dot:nth-child(5) { animation-delay: 0.8s; }
+@keyframes dotBounce { 0%,100% { opacity: 0.3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-6px); } }
+.boot-text { color: #9ba3b8; font-size: 0.85rem; letter-spacing: 0.1em; }
+.boot-skip {
+  position: absolute; bottom: 30px; right: 30px;
+  color: #555; font-size: 0.75rem; cursor: pointer;
+  padding: 6px 14px; border: 1px solid #333; border-radius: 6px;
+  transition: all 0.2s;
+}
+.boot-skip:hover { color: #aaa; border-color: #555; }
+
+/* ═══════════════════════════════════════════════════════
+   DESKTOP
+═══════════════════════════════════════════════════════ */
+#desktop {
+  position: fixed; inset: 0; bottom: 52px;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0,120,212,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(88,101,242,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 60% 80%, rgba(0,180,255,0.08) 0%, transparent 50%),
+    linear-gradient(135deg, #050a18 0%, #0a0f28 40%, #060d22 70%, #030710 100%);
+  overflow: hidden;
+}
+/* wallpaper subtle grid */
+#desktop::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,120,212,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,120,212,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   DESKTOP ICONS
+═══════════════════════════════════════════════════════ */
+#desktop-icons {
+  position: absolute; top: 20px; left: 20px;
+  display: flex; flex-direction: column; gap: 6px;
+  z-index: 10;
+}
+.desktop-icon {
+  display: flex; flex-direction: column; align-items: center;
+  width: 88px; padding: 10px 8px 8px;
+  border-radius: 8px; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  border: 1px solid transparent;
+}
+.desktop-icon:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.12);
+}
+.desktop-icon:active { transform: scale(0.96); }
+.desktop-icon.selected {
+  background: rgba(0,120,212,0.22);
+  border-color: rgba(0,120,212,0.4);
+}
+.di-icon {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 6px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+.di-label {
+  font-size: 0.68rem; font-weight: 500; color: #dde4f0;
+  text-align: center; line-height: 1.3;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  word-break: break-word;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TASKBAR
+═══════════════════════════════════════════════════════ */
+#taskbar {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 52px;
+  background: var(--taskbar-bg);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; padding: 0 12px;
+  z-index: 5000;
+  gap: 4px;
+}
+#start-btn {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1.3rem; color: #0078d4;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+#start-btn:hover { background: rgba(255,255,255,0.1); }
+#start-btn:active { background: rgba(255,255,255,0.05); }
+
+.taskbar-sep { width: 1px; height: 24px; background: rgba(255,255,255,0.1); margin: 0 6px; flex-shrink: 0; }
+
+#taskbar-apps { display: flex; align-items: center; gap: 2px; flex: 1; }
+.taskbar-app-btn {
+  height: 40px; padding: 0 10px; border-radius: 8px;
+  display: flex; align-items: center; gap: 7px;
+  cursor: pointer; font-size: 0.72rem; color: var(--text);
+  transition: background 0.15s;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  max-width: 160px;
+}
+.taskbar-app-btn:hover { background: rgba(255,255,255,0.08); }
+.taskbar-app-btn.active { border-bottom-color: #0078d4; background: rgba(0,120,212,0.12); }
+.taskbar-app-btn.minimized { border-bottom-color: rgba(255,255,255,0.3); opacity: 0.7; }
+.taskbar-app-btn i { font-size: 0.85rem; }
+
+#taskbar-right {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 8px; flex-shrink: 0;
+}
+.sys-tray { display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-size: 0.85rem; }
+#clock { font-size: 0.72rem; color: var(--text); text-align: right; line-height: 1.4; }
+#clock .clock-time { font-weight: 600; }
+#clock .clock-date { color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════════════
+   START MENU
+═══════════════════════════════════════════════════════ */
+#start-menu {
+  position: fixed; bottom: 58px; left: 12px;
+  width: 360px;
+  background: rgba(15,15,28,0.94);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  z-index: 6000;
+  display: none; padding: 20px;
+  animation: menuOpen 0.18s ease;
+}
+#start-menu.visible { display: block; }
+@keyframes menuOpen { from { opacity:0; transform: translateY(10px) scale(0.97); } to { opacity:1; transform: none; } }
+.start-search {
+  width: 100%; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 8px;
+  padding: 9px 14px; color: var(--text); font-size: 0.82rem;
+  font-family: var(--font); outline: none; margin-bottom: 18px;
+}
+.start-search:focus { border-color: rgba(0,120,212,0.5); }
+.start-section-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+.start-apps {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  margin-bottom: 16px;
+}
+.start-app {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 10px 6px; border-radius: 8px; cursor: pointer;
+  transition: background 0.15s;
+}
+.start-app:hover { background: rgba(255,255,255,0.08); }
+.start-app-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.start-app-name { font-size: 0.65rem; color: var(--text-muted); text-align: center; }
+.start-footer {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 14px; display: flex; justify-content: space-between;
+  align-items: center;
+}
+.start-user { display: flex; align-items: center; gap: 10px; }
+.start-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, #0078d4, #00d4ff);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; font-weight: 700; color: #fff;
+}
+.start-user-name { font-size: 0.8rem; font-weight: 500; }
+.start-power { color: var(--text-muted); font-size: 0.85rem; cursor: pointer; }
+.start-power:hover { color: var(--text); }
+
+/* ═══════════════════════════════════════════════════════
+   WINDOWS
+═══════════════════════════════════════════════════════ */
+.win {
+  position: absolute;
+  min-width: 520px; min-height: 360px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 90px);
+  background: rgba(12,14,28,0.88);
+  backdrop-filter: var(--glass-blur) saturate(160%);
+  -webkit-backdrop-filter: var(--glass-blur) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--win-radius);
+  box-shadow: var(--glass-shadow), 0 0 0 1px rgba(0,0,0,0.5);
+  display: none; flex-direction: column;
+  overflow: hidden;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.win.visible { display: flex; animation: winOpen 0.18s ease; }
+.win.minimizing { opacity: 0; transform: scale(0.95) translateY(20px); }
+@keyframes winOpen { from { opacity:0; transform: scale(0.94) translateY(12px); } to { opacity:1; transform: none; } }
+
+/* Title bar — Windows 11 style: title LEFT, controls RIGHT */
+.win-titlebar {
+  display: flex; align-items: center;
+  background: var(--titlebar-bg);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0 0 0 14px; height: 38px;
+  cursor: move; flex-shrink: 0;
+  gap: 10px;
+}
+.win-title {
+  flex: 1; font-size: 0.78rem; font-weight: 500; color: var(--text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* Win11 control buttons on the right */
+.win-controls {
+  display: flex; align-items: stretch; height: 38px; margin-left: auto; flex-shrink: 0;
+}
+.win-btn {
+  width: 46px; height: 100%; border: none; background: transparent;
+  color: var(--text-muted); font-size: 0.75rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+.win-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+.win-close:hover { background: #c42b1c !important; color: #fff !important; }
+/* Remove old traffic light refs */
+.win-traffic { display: none; }
+
+/* Content area */
+.win-body {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 24px 28px; scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+.win-body::-webkit-scrollbar { width: 6px; }
+.win-body::-webkit-scrollbar-track { background: transparent; }
+.win-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════════════
+   WINDOW CONTENT STYLES
+═══════════════════════════════════════════════════════ */
+
+/* — About — */
+.about-hero { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 28px; }
+.about-avatar {
+  width: 90px; height: 90px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, #0078d4 0%, #00d4ff 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem; font-weight: 800; color: #fff;
+  border: 3px solid rgba(0,212,255,0.3);
+  box-shadow: 0 0 24px rgba(0,212,255,0.2);
+  overflow: hidden;
+}
+.about-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.about-name { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.about-role { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.badge {
+  font-size: 0.65rem; font-weight: 700; padding: 4px 10px;
+  border-radius: 20px; border: 1px solid; letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-mvp { background: rgba(255,185,0,0.12); border-color: rgba(255,185,0,0.4); color: #ffb900; }
+.badge-azure { background: rgba(0,120,212,0.15); border-color: rgba(0,120,212,0.4); color: #0078d4; }
+.badge-sap { background: rgba(0,143,211,0.15); border-color: rgba(0,143,211,0.4); color: #008fd3; }
+.badge-ai { background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.4); color: #818cf8; }
+.section-label {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent2); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+.about-bio { font-size: 0.85rem; line-height: 1.75; color: #c8d0e0; margin-bottom: 24px; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+.stat-box {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 16px 14px; text-align: center;
+}
+.stat-num { font-size: 1.6rem; font-weight: 800; color: var(--accent2); }
+.stat-lbl { font-size: 0.65rem; color: var(--text-muted); margin-top: 3px; }
+.expertise-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; padding: 5px 12px; font-size: 0.73rem; color: #c4ccdf;
+}
+
+/* — Projects — */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+.filter-btn {
+  padding: 5px 14px; border-radius: 20px; font-size: 0.72rem; font-weight: 500;
+  cursor: pointer; border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04); color: var(--text-muted);
+  transition: all 0.15s; font-family: var(--font);
+}
+.filter-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+.filter-btn.active { background: rgba(0,120,212,0.2); border-color: rgba(0,120,212,0.5); color: #60a5fa; }
+.proj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.proj-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 16px; cursor: pointer;
+  transition: all 0.18s; text-decoration: none; display: block;
+}
+.proj-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(0,120,212,0.3);
+  transform: translateY(-2px);
+}
+.proj-icon-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.proj-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  flex-shrink: 0;
+}
+.proj-name { font-size: 0.82rem; font-weight: 600; color: #e0e6f0; }
+.proj-desc { font-size: 0.73rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 10px; min-height: 0; }
+.proj-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.proj-tag {
+  font-size: 0.62rem; padding: 2px 7px; border-radius: 4px;
+  background: var(--tag-bg); color: #7fb3ff;
+}
+.proj-live { font-size: 0.65rem; color: #22c55e; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+.proj-live::before { content: '●'; font-size: 0.5rem; }
+
+/* — Writing — */
+.article-list { display: flex; flex-direction: column; gap: 12px; }
+.article-row {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px; padding: 16px; text-decoration: none;
+  transition: all 0.18s;
+}
+.article-row:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); }
+.article-icon {
+  width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+}
+.article-meta {}
+.article-name { font-size: 0.85rem; font-weight: 600; color: #e0e6f0; margin-bottom: 4px; }
+.article-sub { font-size: 0.73rem; color: var(--text-muted); }
+.article-arrow { margin-left: auto; color: var(--text-muted); font-size: 0.8rem; align-self: center; flex-shrink: 0; }
+
+/* — Speaking — */
+.speak-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 20px; margin-bottom: 14px;
+}
+.speak-title { font-size: 0.95rem; font-weight: 700; color: #e0e8ff; margin-bottom: 8px; }
+.speak-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 14px; }
+.speak-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 18px; border-radius: 8px; font-size: 0.78rem; font-weight: 600;
+  text-decoration: none; transition: all 0.18s;
+  background: rgba(0,120,212,0.18); color: #60a5fa; border: 1px solid rgba(0,120,212,0.35);
+}
+.speak-btn:hover { background: rgba(0,120,212,0.3); }
+.speak-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 12px; }
+.speak-tag { font-size: 0.65rem; padding: 3px 9px; border-radius: 4px; background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
+
+/* — Stats — */
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; }
+.stats-box {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 22px 18px;
+}
+.stats-num { font-size: 2.2rem; font-weight: 800; color: var(--accent2); line-height: 1; }
+.stats-lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; }
+.stats-bar-row { margin-bottom: 14px; }
+.stats-bar-label { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px; }
+.stats-bar-track { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+.stats-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #0078d4, #00d4ff); }
+
+/* — Contact — */
+.contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+.contact-card {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 16px; text-decoration: none; transition: all 0.18s;
+}
+.contact-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+.contact-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+}
+.contact-name { font-size: 0.82rem; font-weight: 600; color: #e0e6f0; }
+.contact-sub { font-size: 0.7rem; color: var(--text-muted); }
+.contact-kofi {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,94,91,0.08); border: 1px solid rgba(255,94,91,0.2);
+  border-radius: 10px; padding: 16px 20px; text-decoration: none; margin-top: 4px;
+  transition: all 0.18s;
+}
+.contact-kofi:hover { background: rgba(255,94,91,0.14); }
+.contact-kofi-text { font-size: 0.82rem; font-weight: 600; color: #ff5e5b; }
+.contact-kofi-sub { font-size: 0.7rem; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════════════
+   DESKTOP CONTEXT MENU
+═══════════════════════════════════════════════════════ */
+#context-menu {
+  position: fixed; background: rgba(15,15,28,0.96);
+  backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  padding: 6px; z-index: 7000; display: none; min-width: 180px;
+  animation: menuOpen 0.12s ease;
+}
+#context-menu.visible { display: block; }
+.ctx-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px; border-radius: 6px; font-size: 0.78rem; color: var(--text-muted);
+  cursor: pointer; transition: all 0.12s;
+}
+.ctx-item:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+.ctx-sep { height: 1px; background: rgba(255,255,255,0.07); margin: 4px 6px; }
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE FALLBACK
+═══════════════════════════════════════════════════════ */
+#mobile-fallback {
+  display: none;
+  position: fixed; inset: 0; background: #050a18;
+  align-items: center; justify-content: center; z-index: 10000;
+  padding: 40px; text-align: center; flex-direction: column; gap: 20px;
+}
+.mobile-icon { font-size: 3rem; color: #0078d4; }
+.mobile-title { font-size: 1.2rem; font-weight: 700; color: #e0e6f0; }
+.mobile-sub { font-size: 0.85rem; color: #9ba3b8; line-height: 1.6; }
+.mobile-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+  text-decoration: none; background: #0078d4; color: #fff; margin-top: 8px;
+}
+@media (max-width: 768px) {
+  #mobile-fallback { display: flex; }
+  #boot-screen, #desktop, #taskbar, #start-menu { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLLBAR GLOBAL
+═══════════════════════════════════════════════════════ */
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     BOOT SCREEN
+══════════════════════════════════════ -->
+<div id="boot-screen">
+  <div class="boot-logo"><i class="fab fa-windows"></i></div>
+  <div class="boot-dots">
+    <div class="boot-dot"></div>
+    <div class="boot-dot"></div>
+    <div class="boot-dot"></div>
+    <div class="boot-dot"></div>
+    <div class="boot-dot"></div>
+  </div>
+  <div class="boot-text">AmitOS · Portfolio Edition</div>
+  <div class="boot-skip" onclick="bootDone()">Skip →</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DESKTOP
+══════════════════════════════════════ -->
+<div id="desktop">
+  <div id="desktop-icons">
+    <div class="desktop-icon" onclick="selectIcon(this); openWindow('about')">
+      <div class="di-icon" style="background:linear-gradient(135deg,#0078d4,#00a8ff)"><i class="fas fa-user"></i></div>
+      <div class="di-label">About Me</div>
+    </div>
+    <div class="desktop-icon" onclick="selectIcon(this); openWindow('projects')">
+      <div class="di-icon" style="background:linear-gradient(135deg,#5865f2,#818cf8)"><i class="fas fa-layer-group"></i></div>
+      <div class="di-label">Projects</div>
+    </div>
+    <div class="desktop-icon" onclick="selectIcon(this); openWindow('writing')">
+      <div class="di-icon" style="background:linear-gradient(135deg,#742774,#c084fc)"><i class="fas fa-pen-nib"></i></div>
+      <div class="di-label">Writing</div>
+    </div>
+    <div class="desktop-icon" onclick="selectIcon(this); openWindow('speaking')">
+      <div class="di-icon" style="background:linear-gradient(135deg,#059669,#34d399)"><i class="fas fa-microphone"></i></div>
+      <div class="di-label">Speaking</div>
+    </div>
+    <div class="desktop-icon" onclick="selectIcon(this); openWindow('stats')">
+      <div class="di-icon" style="background:linear-gradient(135deg,#d97706,#fbbf24)"><i class="fas fa-chart-bar"></i></div>
+      <div class="di-label">Stats</div>
+    </div>
+    <div class="desktop-icon" onclick="selectIcon(this); openWindow('contact')">
+      <div class="di-icon" style="background:linear-gradient(135deg,#dc2626,#f87171)"><i class="fas fa-envelope"></i></div>
+      <div class="di-label">Contact</div>
+    </div>
+    <div class="desktop-icon" onclick="selectIcon(this); openExternal('https://aka.ms/amitlal')">
+      <div class="di-icon" style="background:linear-gradient(135deg,#0a7abf,#00d4ff)"><i class="fas fa-external-link-alt"></i></div>
+      <div class="di-label">aka.ms/amitlal</div>
+    </div>
+    <div class="desktop-icon" onclick="selectIcon(this); openExternal('https://www.amazon.com/AI-2040-Artificial-Intelligence-Reshape-ebook/dp/B0DNQ1N4G1')">
+      <div class="di-icon" style="background:linear-gradient(135deg,#1e293b,#475569)"><i class="fas fa-book"></i></div>
+      <div class="di-label">AI 2040 Book</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TASKBAR
+══════════════════════════════════════ -->
+<div id="taskbar">
+  <div id="start-btn" onclick="toggleStartMenu()" title="Start">
+    <i class="fab fa-windows"></i>
+  </div>
+  <div class="taskbar-sep"></div>
+  <div id="taskbar-apps"></div>
+  <div id="taskbar-right">
+    <div class="sys-tray">
+      <i class="fas fa-wifi" title="Network"></i>
+      <i class="fas fa-volume-up" title="Sound"></i>
+      <i class="fas fa-battery-three-quarters" title="Battery"></i>
+    </div>
+    <div id="clock">
+      <div class="clock-time" id="clock-time"></div>
+      <div class="clock-date" id="clock-date"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     START MENU
+══════════════════════════════════════ -->
+<div id="start-menu">
+  <input class="start-search" placeholder="🔍  Search apps…" id="start-search-input" oninput="filterStartApps(this.value)">
+  <div class="start-section-label">Pinned</div>
+  <div class="start-apps" id="start-apps-grid">
+    <div class="start-app" onclick="openFromStart('about')">
+      <div class="start-app-icon" style="background:linear-gradient(135deg,#0078d4,#00a8ff)"><i class="fas fa-user" style="color:#fff"></i></div>
+      <div class="start-app-name">About Me</div>
+    </div>
+    <div class="start-app" onclick="openFromStart('projects')">
+      <div class="start-app-icon" style="background:linear-gradient(135deg,#5865f2,#818cf8)"><i class="fas fa-layer-group" style="color:#fff"></i></div>
+      <div class="start-app-name">Projects</div>
+    </div>
+    <div class="start-app" onclick="openFromStart('writing')">
+      <div class="start-app-icon" style="background:linear-gradient(135deg,#742774,#c084fc)"><i class="fas fa-pen-nib" style="color:#fff"></i></div>
+      <div class="start-app-name">Writing</div>
+    </div>
+    <div class="start-app" onclick="openFromStart('speaking')">
+      <div class="start-app-icon" style="background:linear-gradient(135deg,#059669,#34d399)"><i class="fas fa-microphone" style="color:#fff"></i></div>
+      <div class="start-app-name">Speaking</div>
+    </div>
+    <div class="start-app" onclick="openFromStart('stats')">
+      <div class="start-app-icon" style="background:linear-gradient(135deg,#d97706,#fbbf24)"><i class="fas fa-chart-bar" style="color:#fff"></i></div>
+      <div class="start-app-name">Stats</div>
+    </div>
+    <div class="start-app" onclick="openFromStart('contact')">
+      <div class="start-app-icon" style="background:linear-gradient(135deg,#dc2626,#f87171)"><i class="fas fa-envelope" style="color:#fff"></i></div>
+      <div class="start-app-name">Contact</div>
+    </div>
+    <div class="start-app" onclick="openExternal('https://aka.ms/amitlal'); closeStartMenu();">
+      <div class="start-app-icon" style="background:linear-gradient(135deg,#0a7abf,#00d4ff)"><i class="fas fa-external-link-alt" style="color:#fff"></i></div>
+      <div class="start-app-name">aka.ms</div>
+    </div>
+    <div class="start-app" onclick="openExternal('https://www.amazon.com/AI-2040-Artificial-Intelligence-Reshape-ebook/dp/B0DNQ1N4G1'); closeStartMenu();">
+      <div class="start-app-icon" style="background:linear-gradient(135deg,#1e293b,#475569)"><i class="fas fa-book" style="color:#fff"></i></div>
+      <div class="start-app-name">AI 2040</div>
+    </div>
+  </div>
+  <div class="start-footer">
+    <div class="start-user">
+      <div class="start-avatar">AL</div>
+      <div class="start-user-name">Amit Lal</div>
+    </div>
+    <a href="https://www.linkedin.com/in/amitlal/" target="_blank" class="start-power" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CONTEXT MENU
+══════════════════════════════════════ -->
+<div id="context-menu">
+  <div class="ctx-item" onclick="openWindow('about'); hideContextMenu()"><i class="fas fa-user fa-fw"></i> About Amit</div>
+  <div class="ctx-item" onclick="openWindow('projects'); hideContextMenu()"><i class="fas fa-layer-group fa-fw"></i> View Projects</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="openWindow('contact'); hideContextMenu()"><i class="fas fa-envelope fa-fw"></i> Get in Touch</div>
+  <div class="ctx-item" onclick="openExternal('https://github.com/amitlals'); hideContextMenu()"><i class="fab fa-github fa-fw"></i> GitHub</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="hideContextMenu()"><i class="fas fa-times fa-fw"></i> Close Menu</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WINDOW: ABOUT ME
+══════════════════════════════════════ -->
+<div class="win" id="win-about" style="top:60px;left:120px;width:620px;height:520px;">
+  <div class="win-titlebar" onmousedown="startDrag(event,'win-about')" onclick="bringToFront('win-about')">
+    <span class="win-title"><i class="fas fa-user" style="margin-right:7px;color:#0078d4"></i>About Me</span>
+    <div class="win-controls">
+      <button class="win-btn win-min" onclick="minimizeWindow('about')" title="Minimize">&#8212;</button>
+      <button class="win-btn win-max" onclick="toggleMaximize('win-about')" title="Maximize">&#9633;</button>
+      <button class="win-btn win-close" onclick="closeWindow('about')" title="Close">&#10005;</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="about-hero">
+      <div class="about-avatar">
+        <img src="https://avatars.githubusercontent.com/u/33432345?v=4" alt="Amit Lal" onerror="this.style.display='none'">
+      </div>
+      <div>
+        <div class="about-name">Amit Lal</div>
+        <div class="about-role">Strategic Technical Leader · SAP × Azure × AI</div>
+        <div class="badge-row">
+          <span class="badge badge-mvp">⭐ Microsoft MVP</span>
+          <span class="badge badge-azure">Azure</span>
+          <span class="badge badge-sap">SAP</span>
+          <span class="badge badge-ai">AI / GenAI</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="about-bio">
+      Amit Lal is a Microsoft MVP and Strategic Technical Leader specializing in the intersection of <strong style="color:#60a5fa">SAP</strong>, <strong style="color:#60a5fa">Microsoft Azure</strong>, and <strong style="color:#60a5fa">Generative AI</strong>. With 15+ years of experience, he has led enterprise digital transformations, built AI-powered solutions for Fortune 500 companies, and is a published author on AI in enterprise computing. Active speaker at Microsoft AI Tour, SAP TechEd, and Microsoft Build.
+    </p>
+
+    <div class="section-label">Impact Numbers</div>
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="stat-num" id="about-repos">40+</div>
+        <div class="stat-lbl">Public Repos</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">15+</div>
+        <div class="stat-lbl">Years Experience</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">5000+</div>
+        <div class="stat-lbl">Community Reach</div>
+      </div>
+    </div>
+
+    <div class="section-label">Expertise</div>
+    <div class="expertise-chips">
+      <span class="chip">SAP S/4HANA</span>
+      <span class="chip">Azure OpenAI</span>
+      <span class="chip">Copilot Studio</span>
+      <span class="chip">Power Platform</span>
+      <span class="chip">Azure AI Foundry</span>
+      <span class="chip">Multi-Agent AI</span>
+      <span class="chip">SAP BTP</span>
+      <span class="chip">Azure Functions</span>
+      <span class="chip">Digital Twin</span>
+      <span class="chip">RAG Systems</span>
+      <span class="chip">LLM Engineering</span>
+      <span class="chip">Edge AI</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WINDOW: PROJECTS
+══════════════════════════════════════ -->
+<div class="win" id="win-projects" style="top:40px;left:160px;width:700px;height:560px;">
+  <div class="win-titlebar" onmousedown="startDrag(event,'win-projects')" onclick="bringToFront('win-projects')">
+    <span class="win-title"><i class="fas fa-layer-group" style="margin-right:7px;color:#818cf8"></i>Projects &amp; Demos</span>
+    <div class="win-controls">
+      <button class="win-btn win-min" onclick="minimizeWindow('projects')" title="Minimize">&#8212;</button>
+      <button class="win-btn win-max" onclick="toggleMaximize('win-projects')" title="Maximize">&#9633;</button>
+      <button class="win-btn win-close" onclick="closeWindow('projects')" title="Close">&#10005;</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="filter-bar" id="proj-filter-bar">
+      <button class="filter-btn active" data-filter="all" onclick="filterProjects('all',this)">All</button>
+      <button class="filter-btn" data-filter="live" onclick="filterProjects('live',this)">Live Demos</button>
+      <button class="filter-btn" data-filter="ai" onclick="filterProjects('ai',this)">AI / ML</button>
+      <button class="filter-btn" data-filter="sap" onclick="filterProjects('sap',this)">SAP</button>
+      <button class="filter-btn" data-filter="azure" onclick="filterProjects('azure',this)">Azure</button>
+    </div>
+    <div class="proj-grid" id="proj-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WINDOW: WRITING
+══════════════════════════════════════ -->
+<div class="win" id="win-writing" style="top:80px;left:200px;width:580px;height:480px;">
+  <div class="win-titlebar" onmousedown="startDrag(event,'win-writing')" onclick="bringToFront('win-writing')">
+    <span class="win-title"><i class="fas fa-pen-nib" style="margin-right:7px;color:#c084fc"></i>Writing &amp; Content</span>
+    <div class="win-controls">
+      <button class="win-btn win-min" onclick="minimizeWindow('writing')" title="Minimize">&#8212;</button>
+      <button class="win-btn win-max" onclick="toggleMaximize('win-writing')" title="Maximize">&#9633;</button>
+      <button class="win-btn win-close" onclick="closeWindow('writing')" title="Close">&#10005;</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="section-label">Articles &amp; Blogs</div>
+    <div class="article-list">
+      <a class="article-row" href="https://community.powerplatform.com/blogs/post/?postid=b738010c-c5fa-ef11-be20-6045bdf03fcb" target="_blank">
+        <div class="article-icon" style="background:rgba(116,39,116,0.2);color:#c084fc"><i class="fas fa-file-alt"></i></div>
+        <div class="article-meta">
+          <div class="article-name">6 AI Approaches for SAP EWA</div>
+          <div class="article-sub">Power Platform Community · SAP Tech Reports</div>
+        </div>
+        <i class="fas fa-arrow-right article-arrow"></i>
+      </a>
+      <a class="article-row" href="https://community.powerplatform.com/blogs/post/?postid=6a8fb326-068d-ef11-ac21-6045bda6da2f" target="_blank">
+        <div class="article-icon" style="background:rgba(116,39,116,0.2);color:#c084fc"><i class="fas fa-user-tie"></i></div>
+        <div class="article-meta">
+          <div class="article-name">Copilot Agents for SAP</div>
+          <div class="article-sub">Power Platform Community · Multi-Agent AI Platform</div>
+        </div>
+        <i class="fas fa-arrow-right article-arrow"></i>
+      </a>
+      <a class="article-row" href="https://techcommunity.microsoft.com/blog/azure-ai-services-blog/powering-your-business-with-ai-7-unbelievable-whiteboard-scenarios-for-sap-s4han/3790982" target="_blank">
+        <div class="article-icon" style="background:rgba(0,164,239,0.15);color:#00a4ef"><i class="fas fa-lightbulb"></i></div>
+        <div class="article-meta">
+          <div class="article-name">7 AI Whiteboard Scenarios</div>
+          <div class="article-sub">Microsoft Tech Community · Azure OpenAI + SAP S/4HANA</div>
+        </div>
+        <i class="fas fa-arrow-right article-arrow"></i>
+      </a>
+    </div>
+
+    <div class="section-label" style="margin-top:24px">Book</div>
+    <a class="article-row" href="https://www.amazon.com/AI-2040-Artificial-Intelligence-Reshape-ebook/dp/B0DNQ1N4G1" target="_blank" style="border-color:rgba(255,185,0,0.15);background:rgba(255,185,0,0.04)">
+      <div class="article-icon" style="background:rgba(255,185,0,0.15);color:#fbbf24"><i class="fas fa-book"></i></div>
+      <div class="article-meta">
+        <div class="article-name">AI 2040: How Artificial Intelligence Will Reshape Business</div>
+        <div class="article-sub">Published on Amazon · Enterprise AI Integration</div>
+      </div>
+      <i class="fas fa-arrow-right article-arrow" style="color:#fbbf24"></i>
+    </a>
+
+    <div class="section-label" style="margin-top:24px">Newsletter</div>
+    <a class="article-row" href="https://ai-with-amit.beehiiv.com/subscribe" target="_blank" style="border-color:rgba(244,114,182,0.15);background:rgba(244,114,182,0.04)">
+      <div class="article-icon" style="background:rgba(244,114,182,0.15);color:#f472b6"><i class="fas fa-envelope-open-text"></i></div>
+      <div class="article-meta">
+        <div class="article-name">AI with Amit Newsletter</div>
+        <div class="article-sub">Weekly AI insights for enterprise professionals</div>
+      </div>
+      <i class="fas fa-arrow-right article-arrow" style="color:#f472b6"></i>
+    </a>
+
+    <div class="section-label" style="margin-top:24px">YouTube</div>
+    <a class="article-row" href="https://www.youtube.com/@AI-with-AmitLal" target="_blank" style="border-color:rgba(255,0,0,0.15);background:rgba(255,0,0,0.04)">
+      <div class="article-icon" style="background:rgba(255,0,0,0.15);color:#ff4444"><i class="fab fa-youtube"></i></div>
+      <div class="article-meta">
+        <div class="article-name">AI with Amit Lal</div>
+        <div class="article-sub">AI tutorials, demos & enterprise solutions</div>
+      </div>
+      <i class="fas fa-arrow-right article-arrow" style="color:#ff4444"></i>
+    </a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WINDOW: SPEAKING
+══════════════════════════════════════ -->
+<div class="win" id="win-speaking" style="top:100px;left:240px;width:580px;height:440px;">
+  <div class="win-titlebar" onmousedown="startDrag(event,'win-speaking')" onclick="bringToFront('win-speaking')">
+    <span class="win-title"><i class="fas fa-microphone" style="margin-right:7px;color:#34d399"></i>Speaking &amp; Workshops</span>
+    <div class="win-controls">
+      <button class="win-btn win-min" onclick="minimizeWindow('speaking')" title="Minimize">&#8212;</button>
+      <button class="win-btn win-max" onclick="toggleMaximize('win-speaking')" title="Maximize">&#9633;</button>
+      <button class="win-btn win-close" onclick="closeWindow('speaking')" title="Close">&#10005;</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="section-label">Workshops</div>
+    <div class="speak-card">
+      <div class="speak-title">Build Your First AI Agent</div>
+      <div class="speak-tags">
+        <span class="speak-tag">azure</span>
+        <span class="speak-tag">ai-agent</span>
+        <span class="speak-tag">workshop</span>
+        <span class="speak-tag">hands-on</span>
+      </div>
+      <div class="speak-desc">
+        Hands-on workshop guiding participants through building their first intelligent agent with Azure AI Agent Service. Delivered at Microsoft AI Tour globally.
+      </div>
+      <a href="https://aka.ms/aitour/wrk552" target="_blank" class="speak-btn">
+        <i class="fas fa-external-link-alt"></i> View Workshop
+      </a>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Conference Talks</div>
+    <div class="speak-card">
+      <div class="speak-title">Microsoft AI Tour</div>
+      <div class="speak-tags"><span class="speak-tag">microsoft</span><span class="speak-tag">ai</span><span class="speak-tag">global</span></div>
+      <div class="speak-desc">Speaking on enterprise AI adoption, SAP + Azure integration patterns, and multi-agent AI architectures at Microsoft's premier AI tour events.</div>
+    </div>
+    <div class="speak-card" style="margin-top:12px">
+      <div class="speak-title">SAP TechEd &amp; SAP Community</div>
+      <div class="speak-tags"><span class="speak-tag">sap</span><span class="speak-tag">btp</span><span class="speak-tag">ai</span></div>
+      <div class="speak-desc">Sessions on SAP BTP, AI-powered EWA analysis, SAP + Azure integration patterns, and the future of intelligent enterprise.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WINDOW: STATS
+══════════════════════════════════════ -->
+<div class="win" id="win-stats" style="top:80px;left:280px;width:540px;height:420px;">
+  <div class="win-titlebar" onmousedown="startDrag(event,'win-stats')" onclick="bringToFront('win-stats')">
+    <span class="win-title"><i class="fas fa-chart-bar" style="margin-right:7px;color:#fbbf24"></i>Stats &amp; Impact</span>
+    <div class="win-controls">
+      <button class="win-btn win-min" onclick="minimizeWindow('stats')" title="Minimize">&#8212;</button>
+      <button class="win-btn win-max" onclick="toggleMaximize('win-stats')" title="Maximize">&#9633;</button>
+      <button class="win-btn win-close" onclick="closeWindow('stats')" title="Close">&#10005;</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="section-label">GitHub Stats</div>
+    <div class="stats-grid">
+      <div class="stats-box">
+        <div class="stats-num" id="stat-repos-os">—</div>
+        <div class="stats-lbl">Public Repositories</div>
+      </div>
+      <div class="stats-box">
+        <div class="stats-num" id="stat-stars-os">—</div>
+        <div class="stats-lbl">Total Stars</div>
+      </div>
+      <div class="stats-box">
+        <div class="stats-num">15+</div>
+        <div class="stats-lbl">Years in Tech</div>
+      </div>
+      <div class="stats-box">
+        <div class="stats-num">5K+</div>
+        <div class="stats-lbl">Community Reach</div>
+      </div>
+    </div>
+
+    <div class="section-label">Technology Focus</div>
+    <div class="stats-bar-row">
+      <div class="stats-bar-label"><span>Azure &amp; Cloud</span><span>90%</span></div>
+      <div class="stats-bar-track"><div class="stats-bar-fill" style="width:90%;background:linear-gradient(90deg,#0078d4,#00a4ef)"></div></div>
+    </div>
+    <div class="stats-bar-row">
+      <div class="stats-bar-label"><span>SAP Technologies</span><span>85%</span></div>
+      <div class="stats-bar-track"><div class="stats-bar-fill" style="width:85%;background:linear-gradient(90deg,#008fd3,#00c4ff)"></div></div>
+    </div>
+    <div class="stats-bar-row">
+      <div class="stats-bar-label"><span>AI / GenAI / LLMs</span><span>80%</span></div>
+      <div class="stats-bar-track"><div class="stats-bar-fill" style="width:80%;background:linear-gradient(90deg,#6366f1,#818cf8)"></div></div>
+    </div>
+    <div class="stats-bar-row">
+      <div class="stats-bar-label"><span>Power Platform</span><span>75%</span></div>
+      <div class="stats-bar-track"><div class="stats-bar-fill" style="width:75%;background:linear-gradient(90deg,#742774,#c084fc)"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WINDOW: CONTACT
+══════════════════════════════════════ -->
+<div class="win" id="win-contact" style="top:90px;left:200px;width:560px;height:480px;">
+  <div class="win-titlebar" onmousedown="startDrag(event,'win-contact')" onclick="bringToFront('win-contact')">
+    <span class="win-title"><i class="fas fa-envelope" style="margin-right:7px;color:#f87171"></i>Contact &amp; Connect</span>
+    <div class="win-controls">
+      <button class="win-btn win-min" onclick="minimizeWindow('contact')" title="Minimize">&#8212;</button>
+      <button class="win-btn win-max" onclick="toggleMaximize('win-contact')" title="Maximize">&#9633;</button>
+      <button class="win-btn win-close" onclick="closeWindow('contact')" title="Close">&#10005;</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="section-label">Social &amp; Professional</div>
+    <div class="contact-grid">
+      <a class="contact-card" href="https://www.linkedin.com/in/amitlal/" target="_blank">
+        <div class="contact-icon" style="background:rgba(0,119,181,0.2);color:#0077b5"><i class="fab fa-linkedin"></i></div>
+        <div>
+          <div class="contact-name">LinkedIn</div>
+          <div class="contact-sub">Professional Network</div>
+        </div>
+      </a>
+      <a class="contact-card" href="https://github.com/amitlals" target="_blank">
+        <div class="contact-icon" style="background:rgba(110,118,129,0.2);color:#adbac7"><i class="fab fa-github"></i></div>
+        <div>
+          <div class="contact-name">GitHub</div>
+          <div class="contact-sub">Code Repositories</div>
+        </div>
+      </a>
+      <a class="contact-card" href="https://x.com/amitlalamitlal" target="_blank">
+        <div class="contact-icon" style="background:rgba(29,161,242,0.15);color:#1da1f2"><i class="fab fa-twitter"></i></div>
+        <div>
+          <div class="contact-name">X / Twitter</div>
+          <div class="contact-sub">Tech Insights</div>
+        </div>
+      </a>
+      <a class="contact-card" href="https://www.youtube.com/@AI-with-AmitLal" target="_blank">
+        <div class="contact-icon" style="background:rgba(255,0,0,0.12);color:#ff0000"><i class="fab fa-youtube"></i></div>
+        <div>
+          <div class="contact-name">YouTube</div>
+          <div class="contact-sub">AI Tutorials</div>
+        </div>
+      </a>
+      <a class="contact-card" href="https://ai-with-amit.beehiiv.com/subscribe" target="_blank">
+        <div class="contact-icon" style="background:rgba(244,114,182,0.15);color:#f472b6"><i class="fas fa-envelope-open-text"></i></div>
+        <div>
+          <div class="contact-name">Newsletter</div>
+          <div class="contact-sub">AI with Amit</div>
+        </div>
+      </a>
+      <a class="contact-card" href="https://huggingface.co/amitlal" target="_blank">
+        <div class="contact-icon" style="background:rgba(255,189,0,0.15);color:#ffbd00"><i class="fas fa-brain"></i></div>
+        <div>
+          <div class="contact-name">HuggingFace</div>
+          <div class="contact-sub">AI Models &amp; Demos</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-label">Support</div>
+    <a class="contact-kofi" href="https://ko-fi.com/amitlall" target="_blank">
+      <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,94,91,0.15);display:flex;align-items:center;justify-content:center;color:#ff5e5b;font-size:1.1rem;flex-shrink:0"><i class="fas fa-mug-hot"></i></div>
+      <div>
+        <div class="contact-kofi-text">Buy me a coffee on Ko-fi</div>
+        <div class="contact-kofi-sub">Support open-source AI research &amp; demos</div>
+      </div>
+    </a>
+
+    <div class="section-label" style="margin-top:24px">Quick Link</div>
+    <a class="contact-card" href="https://aka.ms/amitlal" target="_blank" style="border-color:rgba(0,212,255,0.15);background:rgba(0,212,255,0.04)">
+      <div class="contact-icon" style="background:rgba(0,212,255,0.15);color:#00d4ff"><i class="fas fa-link"></i></div>
+      <div>
+        <div class="contact-name">aka.ms/amitlal</div>
+        <div class="contact-sub">All links in one place</div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MOBILE FALLBACK
+══════════════════════════════════════ -->
+<div id="mobile-fallback">
+  <div class="mobile-icon"><i class="fab fa-windows"></i></div>
+  <div class="mobile-title">AmitOS requires a desktop</div>
+  <div class="mobile-sub">This portfolio OS is designed for desktop browsers.<br>Please visit on a larger screen for the full experience.</div>
+  <a href="index.html" class="mobile-btn"><i class="fas fa-arrow-left"></i> Go to Standard Portfolio</a>
+</div>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+/* ─────────────────────────────────────
+   APP REGISTRY
+───────────────────────────────────── */
+var APPS = {
+  about:    { title: 'About Me',   icon: 'fas fa-user',        color: '#0078d4' },
+  projects: { title: 'Projects',   icon: 'fas fa-layer-group', color: '#818cf8' },
+  writing:  { title: 'Writing',    icon: 'fas fa-pen-nib',     color: '#c084fc' },
+  speaking: { title: 'Speaking',   icon: 'fas fa-microphone',  color: '#34d399' },
+  stats:    { title: 'Stats',      icon: 'fas fa-chart-bar',   color: '#fbbf24' },
+  contact:  { title: 'Contact',    icon: 'fas fa-envelope',    color: '#f87171' }
+};
+var openWindows = {};
+var zTop = 100;
+
+/* ─────────────────────────────────────
+   BOOT SEQUENCE
+───────────────────────────────────── */
+function bootDone() {
+  var boot = document.getElementById('boot-screen');
+  boot.classList.add('fade-out');
+  setTimeout(function() { boot.style.display = 'none'; }, 650);
+}
+setTimeout(bootDone, 1800);
+
+/* ─────────────────────────────────────
+   WINDOW MANAGEMENT
+───────────────────────────────────── */
+function openWindow(id) {
+  var win = document.getElementById('win-' + id);
+  if (!win) return;
+  win.style.display = '';
+  win.classList.add('visible');
+  openWindows[id] = { minimized: false };
+  bringToFront('win-' + id);
+  updateTaskbar();
+  if (id === 'projects') renderProjects();
+}
+
+function closeWindow(id) {
+  var win = document.getElementById('win-' + id);
+  if (!win) return;
+  win.classList.remove('visible');
+  delete openWindows[id];
+  updateTaskbar();
+}
+
+function minimizeWindow(id) {
+  var win = document.getElementById('win-' + id);
+  if (!win) return;
+  if (openWindows[id] && openWindows[id].minimized) {
+    win.classList.add('visible');
+    win.style.display = '';
+    openWindows[id].minimized = false;
+    bringToFront('win-' + id);
+  } else {
+    win.classList.remove('visible');
+    win.style.display = 'none';
+    if (!openWindows[id]) openWindows[id] = {};
+    openWindows[id].minimized = true;
+  }
+  updateTaskbar();
+}
+
+function bringToFront(winId) {
+  zTop += 2;
+  var win = document.getElementById(winId);
+  if (win) win.style.zIndex = zTop;
+}
+
+function toggleMaximize(winId) {
+  var win = document.getElementById(winId);
+  if (!win) return;
+  if (win.dataset.maximized === '1') {
+    win.style.top = win.dataset.restoreTop;
+    win.style.left = win.dataset.restoreLeft;
+    win.style.width = win.dataset.restoreW;
+    win.style.height = win.dataset.restoreH;
+    win.dataset.maximized = '0';
+  } else {
+    win.dataset.restoreTop = win.style.top;
+    win.dataset.restoreLeft = win.style.left;
+    win.dataset.restoreW = win.style.width;
+    win.dataset.restoreH = win.style.height;
+    win.style.top = '0';
+    win.style.left = '0';
+    win.style.width = '100vw';
+    win.style.height = 'calc(100vh - 52px)';
+    win.dataset.maximized = '1';
+  }
+  bringToFront(winId);
+}
+
+/* ─────────────────────────────────────
+   DRAG
+───────────────────────────────────── */
+var dragging = null;
+var dragOffX = 0, dragOffY = 0;
+
+function startDrag(e, winId) {
+  if (e.target.classList.contains('win-btn')) return;
+  bringToFront(winId);
+  var win = document.getElementById(winId);
+  if (win.dataset.maximized === '1') return;
+  dragging = win;
+  var rect = win.getBoundingClientRect();
+  dragOffX = e.clientX - rect.left;
+  dragOffY = e.clientY - rect.top;
+  e.preventDefault();
+}
+
+document.addEventListener('mousemove', function(e) {
+  if (!dragging) return;
+  var x = e.clientX - dragOffX;
+  var y = e.clientY - dragOffY;
+  x = Math.max(0, Math.min(x, window.innerWidth - 60));
+  y = Math.max(0, Math.min(y, window.innerHeight - 100));
+  dragging.style.left = x + 'px';
+  dragging.style.top = y + 'px';
+});
+
+document.addEventListener('mouseup', function() { dragging = null; });
+
+/* ─────────────────────────────────────
+   TASKBAR
+───────────────────────────────────── */
+function updateTaskbar() {
+  var bar = document.getElementById('taskbar-apps');
+  bar.innerHTML = '';
+  Object.keys(openWindows).forEach(function(id) {
+    var app = APPS[id];
+    if (!app) return;
+    var btn = document.createElement('div');
+    btn.className = 'taskbar-app-btn' + (openWindows[id].minimized ? ' minimized' : ' active');
+    btn.innerHTML = '<i class="' + app.icon + '" style="color:' + app.color + '"></i>' + app.title;
+    btn.onclick = function() { minimizeWindow(id); };
+    bar.appendChild(btn);
+  });
+}
+
+/* ─────────────────────────────────────
+   START MENU
+───────────────────────────────────── */
+function toggleStartMenu() {
+  var m = document.getElementById('start-menu');
+  if (m.classList.contains('visible')) {
+    closeStartMenu();
+  } else {
+    m.classList.add('visible');
+    document.getElementById('start-search-input').focus();
+  }
+}
+function closeStartMenu() {
+  document.getElementById('start-menu').classList.remove('visible');
+}
+function openFromStart(id) {
+  openWindow(id);
+  closeStartMenu();
+}
+function filterStartApps(q) {
+  q = q.toLowerCase();
+  var apps = document.querySelectorAll('#start-apps-grid .start-app');
+  apps.forEach(function(a) {
+    var n = a.querySelector('.start-app-name').textContent.toLowerCase();
+    a.style.display = n.includes(q) ? '' : 'none';
+  });
+}
+
+/* ─────────────────────────────────────
+   CLOCK
+───────────────────────────────────── */
+function updateClock() {
+  var now = new Date();
+  var h = now.getHours(), m = now.getMinutes();
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  var mStr = m < 10 ? '0' + m : m;
+  document.getElementById('clock-time').textContent = h + ':' + mStr + ' ' + ampm;
+  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('clock-date').textContent =
+    days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ─────────────────────────────────────
+   CONTEXT MENU
+───────────────────────────────────── */
+document.getElementById('desktop').addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  var m = document.getElementById('context-menu');
+  m.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+  m.style.top = Math.min(e.clientY, window.innerHeight - 180) + 'px';
+  m.classList.add('visible');
+});
+function hideContextMenu() {
+  document.getElementById('context-menu').classList.remove('visible');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#context-menu')) hideContextMenu();
+  if (!e.target.closest('#start-menu') && !e.target.closest('#start-btn')) closeStartMenu();
+});
+
+/* ─────────────────────────────────────
+   DESKTOP ICON SELECTION
+───────────────────────────────────── */
+function selectIcon(el) {
+  document.querySelectorAll('.desktop-icon').forEach(function(i) { i.classList.remove('selected'); });
+  el.classList.add('selected');
+  return true;
+}
+document.getElementById('desktop').addEventListener('click', function(e) {
+  if (!e.target.closest('.desktop-icon')) {
+    document.querySelectorAll('.desktop-icon').forEach(function(i) { i.classList.remove('selected'); });
+  }
+});
+
+/* ─────────────────────────────────────
+   EXTERNAL LINK
+───────────────────────────────────── */
+function openExternal(url) {
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+/* ─────────────────────────────────────
+   PROJECTS DATA + RENDER
+───────────────────────────────────── */
+var PROJECTS = [
+  { name:'SAP Landscape Digital Twin', desc:'Interactive 3D visualization of SAP landscape with real-time monitoring & chaos engineering simulation.', url:'https://sap-landscape-digital-twin.amit-lal.com/', tags:['azure','sap','3d','digital-twin'], icon:'fas fa-cube', color:'#00d4ff', live:true, cats:['live','sap','azure'] },
+  { name:'Cloud Region Advisor', desc:'AI-powered tool to recommend optimal Azure regions based on latency, compliance, cost & SAP requirements.', url:'https://cloudregionadvisor.amit-lal.com/', tags:['azure','ai','cloud','advisor'], icon:'fas fa-globe', color:'#6366f1', live:true, cats:['live','ai','azure'] },
+  { name:'Copilot ROI Calculator', desc:'Microsoft M365 Copilot ROI & savings calculator for enterprise adoption planning.', url:'https://amitlals.github.io/copilot-roi-calculator/', tags:['copilot','m365','roi'], icon:'fas fa-calculator', color:'#6366f1', live:true, cats:['live','ai','azure'] },
+  { name:'BTP Services Explorer', desc:'Unofficial SAP BTP Services Explorer for discovering all available SAP BTP services.', url:'https://studio--btp-services-explorer.us-central1.hosted.app', tags:['sap','btp','dashboard'], icon:'fas fa-search', color:'#008fd3', live:true, cats:['live','sap'] },
+  { name:'SAP RPT-1-OSS Playground', desc:'SAP Model Playground with RPT-1-OSS Platform for finance dashboard exploration on HuggingFace.', url:'https://huggingface.co/spaces/amitlal/sap-finance-dashboard-RPT-1-OSS', tags:['sap','ai','huggingface','finance'], icon:'fas fa-flask', color:'#ffbd00', live:true, cats:['live','sap','ai'] },
+  { name:'Smart Stock Analysis', desc:'AI-driven stock analysis using multi-agentic architecture with Azure AI Foundry and AutoGen.', url:'https://github.com/amitlals/Stock-Analysis-AutoGen-Multi-Agent-Azure-AI-Foundry', tags:['azure','ai','autogen','finance'], icon:'fas fa-chart-line', color:'#10b981', live:false, cats:['ai','azure'] },
+  { name:'SAP EWA Copilot Agent', desc:'AI Copilot Agent for reading and analyzing SAP Early Watch Alert reports with actionable insights.', url:'https://github.com/amitlals/SAP-EWA-Copilot-Agent-v2', tags:['sap','copilot','ai-agent'], icon:'fas fa-shield-alt', color:'#ef4444', live:false, cats:['ai','sap'] },
+  { name:'TaskWeaver SAP AI Agent', desc:'SAP-specialized AI Agent built on Microsoft TaskWeaver framework for intelligent SAP operations.', url:'https://github.com/amitlals/TaskWeaver-SAP-AI-AGENT', tags:['sap','ai-agent','taskweaver'], icon:'fas fa-robot', color:'#8b5cf6', live:false, cats:['ai','sap'] },
+  { name:'Jetson AGX Thor LLMs', desc:'Running open-source large language models on NVIDIA Jetson AGX Thor for edge AI inference.', url:'https://github.com/amitlals/Jetson-AGX-Thor-for-running-Open-Source-LLMs', tags:['nvidia','llm','edge-ai'], icon:'fas fa-microchip', color:'#76b900', live:false, cats:['ai'] },
+  { name:'Azure RAG HR Demo', desc:'Retrieval-Augmented Generation pattern for HR Q&A using Azure Cognitive Search and Azure OpenAI.', url:'https://github.com/amitlals/azure-search-openai-demo-HR', tags:['azure','openai','rag'], icon:'fas fa-users', color:'#00a4ef', live:false, cats:['ai','azure'] },
+  { name:'AI Financial Engineering', desc:'Agentic system for AI-powered financial engineering and analysis at enterprise scale.', url:'https://github.com/amitlals/AI-Financial-Engineering-Agentic-System', tags:['ai','finance','agentic'], icon:'fas fa-coins', color:'#f59e0b', live:false, cats:['ai'] },
+  { name:'Knowledge Mining SAP EWA', desc:'Knowledge Mining with OpenAI to analyze large SAP EWA reports via Power Virtual Agents.', url:'https://github.com/amitlals/Knowledge-Mining-with-OpenAI-SAP-EWA', tags:['azure','openai','sap','knowledge-mining'], icon:'fas fa-database', color:'#742774', live:false, cats:['ai','sap','azure'] }
+];
+
+var currentFilter = 'all';
+
+function renderProjects(filter) {
+  filter = filter || currentFilter;
+  var grid = document.getElementById('proj-grid');
+  if (!grid) return;
+  var filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(function(p) { return p.cats.includes(filter); });
+  grid.innerHTML = filtered.map(function(p) {
+    var liveBadge = p.live ? '<div class="proj-live">Live Demo</div>' : '';
+    var href = p.url ? 'href="' + p.url + '" target="_blank"' : '';
+    return '<a class="proj-card" ' + href + '>' +
+      '<div class="proj-icon-row">' +
+        '<div class="proj-icon" style="background:' + p.color + '1a;color:' + p.color + '"><i class="' + p.icon + '"></i></div>' +
+        '<div class="proj-name">' + p.name + '</div>' +
+      '</div>' +
+      '<div class="proj-desc">' + p.desc + '</div>' +
+      '<div class="proj-tags">' + p.tags.map(function(t) { return '<span class="proj-tag">' + t + '</span>'; }).join('') + '</div>' +
+      liveBadge +
+    '</a>';
+  }).join('');
+}
+
+function filterProjects(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  renderProjects(filter);
+}
+
+/* ─────────────────────────────────────
+   LIVE GITHUB STATS
+───────────────────────────────────── */
+(function fetchStats() {
+  var CACHE_KEY = 'gh_stats_os_v1';
+  var TTL = 3600000;
+  var cached = null;
+  try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY)); } catch(e) {}
+  if (cached && (Date.now() - cached.ts < TTL)) { applyStats(cached.repos, cached.stars); return; }
+  fetch('https://api.github.com/users/amitlals')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var repos = d.public_repos || 0;
+      return fetch('https://api.github.com/users/amitlals/repos?per_page=100&sort=updated')
+        .then(function(r) { return r.json(); })
+        .then(function(list) {
+          var stars = Array.isArray(list) ? list.reduce(function(s, r) { return s + (r.stargazers_count || 0); }, 0) : 0;
+          try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), repos: repos, stars: stars })); } catch(e) {}
+          applyStats(repos, stars);
+        });
+    }).catch(function() {});
+  function applyStats(repos, stars) {
+    var r = document.getElementById('stat-repos-os');
+    var s = document.getElementById('stat-stars-os');
+    var a = document.getElementById('about-repos');
+    if (r) r.textContent = repos;
+    if (s) s.textContent = stars;
+    if (a) a.textContent = repos + '+';
+  }
+})();
+
+/* ─────────────────────────────────────
+   KEYBOARD SHORTCUTS
+───────────────────────────────────── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { hideContextMenu(); closeStartMenu(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleStartMenu(); }
+});
+</script>
+</body>
+</html>
