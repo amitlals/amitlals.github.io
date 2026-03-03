@@ -164,6 +164,64 @@ button{font-family:var(--font);cursor:pointer;}
 .nav-tab.arxiv:hover{color:#f59a72;}
 .nav-tab.win{color:#0078d4;}
 .nav-tab.win:hover{color:#4da3ff;text-decoration:none;}
+.nav-tab.appstore{color:#34d399;}
+.nav-tab.appstore:hover{color:#6ee7b7;text-decoration:none;}
+
+/* ── APP STORE ─────────────────────────── */
+.app-card{background:var(--bg2);border:1px solid var(--bd2);border-radius:10px;padding:28px;margin-bottom:20px;transition:border-color .2s;}
+.app-card:hover{border-color:var(--acc);}
+.app-header{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.app-icon{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;}
+.app-icon.pymaster{background:linear-gradient(135deg,#06b6d4,#8b5cf6);}
+.app-icon.glowly{background:linear-gradient(135deg,#f472b6,#fb923c);}
+.app-meta h3{font-size:1.1rem;font-weight:700;color:var(--fg);margin:0 0 6px;}
+.app-meta p{font-size:.82rem;color:var(--fg2);margin:4px 0 0;}
+.app-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:2px;}
+.app-badge{font-size:.68rem;padding:2px 9px;border-radius:12px;background:var(--bg3);color:var(--fg2);font-weight:600;}
+.app-badge.testflight{background:#78350f;color:#fbbf24;}
+.app-badge.ios{background:#1c1c1e;color:#0a84ff;}
+.app-features{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0;color:var(--fg2);font-size:.82rem;}
+.app-feature{display:flex;align-items:center;gap:5px;}
+.app-feature i{color:var(--acc);font-size:.7rem;}
+.app-screenshots{display:flex;gap:14px;overflow-x:auto;padding:16px 0;scrollbar-width:thin;}
+.app-phone{width:130px;height:260px;border-radius:18px;border:2px solid var(--bd2);overflow:hidden;flex-shrink:0;position:relative;background:var(--bg);}
+.app-phone-screen{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;text-align:center;}
+.app-phone-screen.pymaster-s{background:linear-gradient(180deg,#0f172a,#1e1b4b);}
+.app-phone-screen.glowly-s{background:linear-gradient(180deg,#1a0a1e,#2d1b36);}
+.app-phone-title{font-size:.6rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.app-phone-sub{font-size:.45rem;color:rgba(255,255,255,.5);}
+.app-phone-icon{font-size:1.8rem;margin-bottom:6px;}
+.app-platforms{display:flex;gap:18px;color:var(--fg2);font-size:.78rem;margin-top:4px;align-items:center;}
+.app-platforms i{margin-right:4px;}
+.app-platforms .live{color:#34d399;}
+.app-platforms .planned{color:var(--fg3);font-style:italic;}
+
+/* Sidebar App Store card */
+.discover-card.appstore-card{background:linear-gradient(140deg,#052e16,#0d1b2a,#052e16);border-color:rgba(52,211,153,.3);}
+
+/* lal-agent OpenClaw card */
+.lal-agent-card{
+  display:block;margin:4px 12px 16px;border-radius:10px;padding:12px;
+  background:#1a1a1b;border:1px solid #343536;text-decoration:none;
+  transition:border-color .2s;cursor:pointer;
+}
+.lal-agent-card:hover{border-color:#ff5722;text-decoration:none;}
+.la-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;}
+.la-avatar{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:#ff5722;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:.9rem;
+}
+.la-name{font-size:.72rem;font-weight:700;color:#d7dadc;}
+.la-verified{font-size:.58rem;font-weight:600;color:#00e676;margin-left:4px;}
+.la-bio{font-size:.6rem;color:#818384;margin-top:2px;line-height:1.35;}
+.la-stats{display:flex;gap:10px;font-size:.58rem;color:#818384;margin-bottom:4px;}
+.la-stats b{color:#d7dadc;font-weight:700;}
+.la-meta{display:flex;gap:10px;font-size:.52rem;color:#818384;align-items:center;}
+.la-online{color:#00e676;}
+
+/* Stock ticker widget */
+.stock-widget{margin:4px 12px 16px;border-radius:10px;overflow:hidden;border:1px solid var(--bd2);background:var(--bg2);}
 
 /* ── LAYOUT ─────────────────────────────── */
 #layout{display:flex;padding-top:calc(var(--nav-h) + var(--tab-h));}
@@ -1030,6 +1088,7 @@ footer{
   <a class="nav-tab" href="#contact" data-sec="contact"><i class="fas fa-paper-plane"></i> Get in Touch</a>
   <div class="tab-sep"></div>
   <a class="nav-tab ext win" href="index3.html" target="_blank" title="Windows 11 OS Portfolio Edition — open as desktop experience"><i class="fab fa-windows"></i> Windows Edition ↗</a>
+  <a class="nav-tab appstore" href="#appstore" data-sec="appstore" title="Amit's App Store — iOS & Android apps in TestFlight"><i class="fas fa-mobile-alt"></i> App Store</a>
   <a class="nav-tab ext arxiv" href="https://arxiv.org/abs/2602.19237" target="_blank" title="Research Paper — SAP RPT-1 Evaluation · arXiv 2602.19237"><i class="fas fa-file-alt"></i> My arXiv ↗</a>
 </nav>
 
@@ -1091,6 +1150,58 @@ footer{
       onerror="this.src='';this.outerHTML='<svg class=\'discover-img\' viewBox=\'0 0 68 68\' xmlns=\'http://www.w3.org/2000/svg\'><defs><radialGradient id=\'dg\' cx=\'38%\' cy=\'30%\' r=\'70%\'><stop offset=\'0%\' stop-color=\'#7c3aed\'/><stop offset=\'100%\' stop-color=\'#0f0c29\'/></radialGradient><linearGradient id=\'de\' x1=\'0%\' y1=\'0%\' x2=\'0%\' y2=\'100%\'><stop offset=\'0%\' stop-color=\'#a5f3fc\'/><stop offset=\'100%\' stop-color=\'#0ea5e9\'/></linearGradient></defs><path d=\'M34 4 C20 4 8 14 7 27 C6 40 12 55 22 62 C26 65 30 67 34 67 C38 67 42 65 46 62 C56 55 62 40 61 27 C60 14 48 4 34 4Z\' fill=\'url(#dg)\'/><rect x=\'14\' y=\'29\' width=\'14\' height=\'9\' rx=\'3\' fill=\'url(#de)\'/><rect x=\'40\' y=\'29\' width=\'14\' height=\'9\' rx=\'3\' fill=\'url(#de)\'/></svg>'"
       alt="AmitPilot">
     <button class="discover-btn">Open AmitPilot</button>
+  </div>
+
+  <!-- Discover App Store card -->
+  <div class="discover-card appstore-card" onclick="document.getElementById('appstore').scrollIntoView({behavior:'smooth'})">
+    <div class="discover-eyebrow">Discover</div>
+    <div class="discover-title">App Store</div>
+    <div class="discover-sub">iOS & Android Apps in TestFlight</div>
+    <div class="discover-img" style="display:flex;align-items:center;justify-content:center;font-size:2.6rem;opacity:.85;">📱</div>
+    <button class="discover-btn" style="background:rgba(52,211,153,.92);color:#052e16;">Explore Apps</button>
+  </div>
+
+  <div class="side-divider"></div>
+
+  <!-- lal-agent OpenClaw card (CSS replica of MoltBook profile) -->
+  <a class="lal-agent-card" href="https://moltbook.com/u/lal-agent" target="_blank">
+    <div class="la-row">
+      <div class="la-avatar"><i class="fas fa-robot"></i></div>
+      <div class="la-info">
+        <div class="la-name">u/lal-agent <span class="la-verified">&#10003; Verified</span></div>
+        <div class="la-bio">Amit's AI sidekick running on OpenClaw. Direct, helpful, a little playful. &#9889;</div>
+      </div>
+    </div>
+    <div class="la-stats">
+      <span><b>9</b> karma</span>
+      <span><b>10</b> followers</span>
+      <span><b>1</b> following</span>
+    </div>
+    <div class="la-meta"><span>&#127874; Joined 1/31/2026</span><span class="la-online">&#9679; Online</span></div>
+  </a>
+
+  <div class="side-divider"></div>
+
+  <!-- Stock Ticker Widget -->
+  <div class="stock-widget">
+    <div class="tradingview-widget-container" style="height:160px;">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+      {
+        "symbol": "NASDAQ:MSFT",
+        "width": "100%",
+        "height": "100%",
+        "locale": "en",
+        "dateRange": "1M",
+        "colorTheme": "dark",
+        "isTransparent": true,
+        "autosize": false,
+        "largeChartUrl": "",
+        "noTimeScale": true,
+        "chartOnly": false
+      }
+      </script>
+    </div>
   </div>
 </nav>
 
@@ -1685,6 +1796,111 @@ footer{
   <div id="quiz-area"></div>
 </section>
 
+<!-- ══ APP STORE ══════════════════════════════ -->
+<section class="page-section" id="appstore">
+  <div class="sec-title"><i class="fas fa-mobile-alt"></i> Amit's App Store</div>
+  <p style="color:var(--fg2);font-size:.88rem;margin:-8px 0 28px;">Apps in development &amp; TestFlight — showcasing iOS &amp; Android craft</p>
+
+  <!-- ── PyMaster Learning App ────────────── -->
+  <div class="app-card">
+    <div class="app-header">
+      <div class="app-icon pymaster">🐍</div>
+      <div class="app-meta">
+        <h3>PyMaster Learning App</h3>
+        <div class="app-badges">
+          <span class="app-badge testflight">TestFlight</span>
+          <span class="app-badge">v1.0.0 · Build 5</span>
+          <span class="app-badge ios"><i class="fab fa-apple"></i> iOS</span>
+        </div>
+        <p>AI-Powered Python Learning — bite-sized lessons with an intelligent tutor</p>
+      </div>
+    </div>
+    <div class="app-features">
+      <span class="app-feature"><i class="fas fa-check-circle"></i> AI-Powered Learning Path</span>
+      <span class="app-feature"><i class="fas fa-check-circle"></i> Bite-Sized Daily Lessons</span>
+      <span class="app-feature"><i class="fas fa-check-circle"></i> PyMasterAI Tutor</span>
+      <span class="app-feature"><i class="fas fa-check-circle"></i> Progress Tracking</span>
+      <span class="app-feature"><i class="fas fa-check-circle"></i> Interactive Code Playground</span>
+    </div>
+    <div class="app-screenshots">
+      <div class="app-phone">
+        <div class="app-phone-screen pymaster-s">
+          <div class="app-phone-icon">🐍</div>
+          <div class="app-phone-title">Welcome to PyMaster</div>
+          <div class="app-phone-sub">Start your Python journey</div>
+        </div>
+      </div>
+      <div class="app-phone">
+        <div class="app-phone-screen pymaster-s">
+          <div class="app-phone-icon">🤖</div>
+          <div class="app-phone-title">PyMasterAI</div>
+          <div class="app-phone-sub">Your personal AI tutor</div>
+        </div>
+      </div>
+      <div class="app-phone">
+        <div class="app-phone-screen pymaster-s">
+          <div class="app-phone-icon">📊</div>
+          <div class="app-phone-title">Track Progress</div>
+          <div class="app-phone-sub">Daily streaks & milestones</div>
+        </div>
+      </div>
+    </div>
+    <div class="app-platforms">
+      <span class="live"><i class="fab fa-apple"></i> iOS — TestFlight</span>
+      <span class="planned"><i class="fab fa-android"></i> Android — planned</span>
+    </div>
+  </div>
+
+  <!-- ── Glowly — AI Skin Coach ────────────── -->
+  <div class="app-card">
+    <div class="app-header">
+      <div class="app-icon glowly">✨</div>
+      <div class="app-meta">
+        <h3>Glowly — AI Skin Coach</h3>
+        <div class="app-badges">
+          <span class="app-badge testflight">TestFlight</span>
+          <span class="app-badge">v1.0.0 · Build 4</span>
+          <span class="app-badge ios"><i class="fab fa-apple"></i> iOS</span>
+        </div>
+        <p>AI-Powered Skincare Analysis — personalized routines, 100% private on-device</p>
+      </div>
+    </div>
+    <div class="app-features">
+      <span class="app-feature"><i class="fas fa-check-circle"></i> AI Analysis · 98% Accuracy</span>
+      <span class="app-feature"><i class="fas fa-check-circle"></i> 100% Private (On-Device)</span>
+      <span class="app-feature"><i class="fas fa-check-circle"></i> Personalized Routines</span>
+    </div>
+    <div class="app-screenshots">
+      <div class="app-phone">
+        <div class="app-phone-screen glowly-s">
+          <div class="app-phone-icon">✨</div>
+          <div class="app-phone-title">Welcome to Glowly</div>
+          <div class="app-phone-sub">Your AI skin coach</div>
+        </div>
+      </div>
+      <div class="app-phone">
+        <div class="app-phone-screen glowly-s">
+          <div class="app-phone-icon">📸</div>
+          <div class="app-phone-title">AI Skin Analysis</div>
+          <div class="app-phone-sub">Scan & get insights</div>
+        </div>
+      </div>
+      <div class="app-phone">
+        <div class="app-phone-screen glowly-s">
+          <div class="app-phone-icon">💆</div>
+          <div class="app-phone-title">Your Routine</div>
+          <div class="app-phone-sub">Personalized skincare</div>
+        </div>
+      </div>
+    </div>
+    <div class="app-platforms">
+      <span class="live"><i class="fab fa-apple"></i> iOS — TestFlight</span>
+      <span class="planned"><i class="fab fa-android"></i> Android — planned</span>
+    </div>
+  </div>
+
+</section>
+
 <!-- ══ CONTACT ══════════════════════════════ -->
 <section class="page-section" id="contact">
   <div class="sec-title"><i class="fas fa-paper-plane"></i> Get in Touch</div>
@@ -1718,8 +1934,13 @@ footer{
     </div>
 
     <div class="contact-links-block">
-      <div class="cl-block-title">Or find me here</div>
+      <div class="cl-block-title">Or find me here — or my pet agent</div>
       <div class="contact-link-list">
+        <a class="c-link" href="https://moltbook.com/u/lal-agent" target="_blank">
+          <div class="c-link-icon" style="background:rgba(255,87,34,.1);color:#ff5722"><i class="fas fa-robot"></i></div>
+          <div><div class="c-link-name">u/lal-agent</div><div class="c-link-sub">My AI sidekick on OpenClaw · MoltBook</div></div>
+          <i class="fas fa-arrow-right c-link-arrow"></i>
+        </a>
         <a class="c-link" href="https://www.linkedin.com/in/amitlal/" target="_blank">
           <div class="c-link-icon" style="background:rgba(0,119,181,.12);color:#0077b5"><i class="fab fa-linkedin"></i></div>
           <div><div class="c-link-name">LinkedIn</div><div class="c-link-sub">linkedin.com/in/amitlal</div></div>
@@ -1753,7 +1974,7 @@ footer{
       </div>
       <a class="kofi-strip" href="https://ko-fi.com/amitlall" target="_blank">
         <div class="kofi-ico"><i class="fas fa-mug-hot"></i></div>
-        <div><div class="kofi-text">Buy me a coffee on Ko-fi</div><div class="kofi-sub">Support open-source AI research &amp; demos</div></div>
+        <div><div class="kofi-text">Buy me (or my agent) a coffee</div><div class="kofi-sub">He runs on caffeine &amp; compliments. I just run on caffeine.</div></div>
         <i class="fas fa-arrow-right" style="margin-left:auto;color:#ff5e5b;font-size:.75rem"></i>
       </a>
     </div>
@@ -1859,7 +2080,7 @@ function closeSidebar() {
 }
 
 /* ── NAV ACTIVE ─────────────────────── */
-var secs = ['welcome','portfolio','technologies','writings','universe','certifications','quiz','contact'];
+var secs = ['welcome','portfolio','technologies','writings','universe','certifications','quiz','appstore','contact'];
 window.addEventListener('scroll', function() {
   var y = window.scrollY + 80;
   var cur = secs[0];
@@ -2259,6 +2480,7 @@ var SEARCH_SECTIONS = [
   {id:'universe',     label:'My Universe (3D)',  icon:'fa-globe',        keywords:['3d','galaxy','interactive','visualization','hub']},
   {id:'certifications',label:'Certifications',   icon:'fa-certificate',  keywords:['credly','badges','certs','sap certified','microsoft','nvidia','wharton']},
   {id:'quiz',         label:'Dev Quiz',          icon:'fa-brain',        keywords:['quiz','test','questions','challenge','trivia']},
+  {id:'appstore',    label:'App Store',          icon:'fa-mobile-alt',   keywords:['apps','ios','android','testflight','pymaster','glowly','mobile','swift','kotlin','skin','python']},
   {id:'contact',      label:'Get in Touch',      icon:'fa-paper-plane',  keywords:['contact','email','linkedin','hire','connect','message','form']}
 ];
 
